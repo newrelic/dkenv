@@ -2,7 +2,6 @@ package main
 
 import (
     "github.com/spf13/viper";
-    "errors";
     "flag";
     "fmt";
     "log";
@@ -25,15 +24,16 @@ func main() {
 
     flag.Parse()
 
-    fmt.Println("version has value ", *version)
-    fmt.Println("apiVersion has value ", *apiVersion)
-    
+     
     if *list {
         fmt.Println("Versions downloaded:")
         ListDownloadedVersions()
         os.Exit(0);
     }
+
     if (len(*apiVersion) > 0 || len(*version) > 0) {
+        fmt.Println("version has value ", *version)
+        fmt.Println("apiVersion has value ", *apiVersion)
         if len(*apiVersion) > 0 {
             var err error
             ver, err = ApiToVersion(*apiVersion)
@@ -56,7 +56,6 @@ func main() {
         SwitchVersion(ver, viper.GetString("BinDir"))
         
     } else {
-        ErrHelp := errors.New("flag: help requested")
-        fmt.Println(ErrHelp)
+        flag.Usage()
     }
 }
