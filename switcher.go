@@ -19,6 +19,7 @@ func ApiToVersion(apiVersion string) (string, error) {
         "1.16": "1.4.1",
         "1.17": "1.5.0",
         "1.18": "1.6.0",
+        "1.19": "1.7.0",
     }
     if val, ok := versions[apiVersion]; ok {
         return val, nil
