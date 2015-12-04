@@ -1,6 +1,6 @@
 DKENV
 -----
-dkenv downloads, keeps track of your docker versions and let's you switch between docker versions on the fly, you can also specify the apiversion on the commandline and it will select the correct docker version.  
+dkenv is a tool that downloads Docker versions for you, keeps track of your versions, and lets you switch between docker versions on the fly. You can also specify the apiversion on the command line and dkenv will select the correct docker version.
 
 Designed to bypass the dreaded:
 
@@ -8,7 +8,6 @@ Designed to bypass the dreaded:
 
 
 Use:
-
 
     dkenv -version version
 
