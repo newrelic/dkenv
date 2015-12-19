@@ -1,7 +1,7 @@
 package main
 
 import (
-    "net/http"; 
+    "net/http";
     "io";
     "os";
     "errors";
@@ -55,9 +55,9 @@ func createDotDKEnvDirectory() {
         log.Fatal( err )
     }
 
-    _err := os.Mkdir(usr.HomeDir+"/.dkenv/", 0700) 
+    _err := os.Mkdir(usr.HomeDir+"/.dkenv/", 0700)
     if _err != nil {
-    } 
+    }
 }
 
 func createVersionFile(version string) (out *os.File) {
@@ -67,11 +67,11 @@ func createVersionFile(version string) (out *os.File) {
     }
 
     out, _err := os.Create(usr.HomeDir+"/.dkenv/docker-"+version)
-    
+
     if _err != nil {
             log.Fatal(_err)
     }
-    return out 
+    return out
 }
 
 func redirectPolicyFunc(req *http.Request, via []*http.Request) error {
@@ -106,12 +106,12 @@ func getHttp(version string) *http.Response {
     }
 
     resp, _err := client.Get("https://get.docker.com/builds/"+system+"/x86_64/docker-"+version)
-    
+
     if _err != nil {
         log.Fatal(_err)
-    } 
+    }
 
-    return resp 
+    return resp
 
 }
 
@@ -119,21 +119,21 @@ func GetDocker(version string, binDir string) {
     createDotDKEnvDirectory()
     // Create the docker binary file
     // out := createVersionFile(version)
-    
+
     // defer out.Close()
     // Do the htp get
     resp := getHttp(version)
-     
+
     defer resp.Body.Close()
 
     readerpt := &PassThru{ Reader: resp.Body, length: resp.ContentLength }
 
     body, _err := ioutil.ReadAll(readerpt)
-    
+
     if _err != nil {
         log.Fatal(_err)
-    } 
-    
+    }
+
     usr, err := user.Current()
     if err != nil {
         log.Fatal( err )
@@ -145,6 +145,6 @@ func GetDocker(version string, binDir string) {
 
     if _err != nil {
         log.Fatal(_err)
-    } 
+    }
 
 }

@@ -24,7 +24,7 @@ func main() {
 
     flag.Parse()
 
-     
+
     if *list {
         fmt.Println("Versions downloaded:")
         ListDownloadedVersions()
@@ -49,12 +49,12 @@ func main() {
 
 
         if (VersionDownloaded(ver)) {
-            
+
         } else {
             GetDocker(ver, viper.GetString("BinDir"))
-        }   
+        }
         SwitchVersion(ver, viper.GetString("BinDir"))
-        
+
     } else {
         flag.Usage()
     }
