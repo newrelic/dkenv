@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func ApiToVersion(apiVersion string) (string, error) {
+func apiToVersion(apiVersion string) (string, error) {
 	versions := map[string]string{
 		"1.12": "1.0.1",
 		"1.13": "1.1.2",
@@ -30,7 +30,7 @@ func ApiToVersion(apiVersion string) (string, error) {
 	}
 }
 
-func ListDownloadedVersions() {
+func listDownloadedVersions() {
 	usr, err := user.Current()
 
 	if err != nil {
@@ -44,7 +44,7 @@ func ListDownloadedVersions() {
 	}
 }
 
-func VersionDownloaded(version string) bool {
+func versionDownloaded(version string) bool {
 	usr, err := user.Current()
 
 	if err != nil {
@@ -57,7 +57,7 @@ func VersionDownloaded(version string) bool {
 	return false
 }
 
-func CreateLocalLink(binDir string) {
+func createLocalLink(binDir string) {
 	usr, err := user.Current()
 	if err != nil {
 		log.Fatal(err)
@@ -88,16 +88,16 @@ func CreateLocalLink(binDir string) {
 
 }
 
-func SwitchVersion(version string, binDir string) bool {
+func switchVersion(version string, binDir string) bool {
 	usr, err := user.Current()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if VersionDownloaded(version) {
+	if versionDownloaded(version) {
 		os.Remove(usr.HomeDir + "/.dkenv/docker")
 		os.Symlink(usr.HomeDir+"/.dkenv/docker-"+version, usr.HomeDir+"/.dkenv/docker")
-		CreateLocalLink(binDir)
+		createLocalLink(binDir)
 
 	}
 
