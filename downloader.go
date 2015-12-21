@@ -139,6 +139,10 @@ func getDocker(version string, binDir string) {
 		log.Fatal(err)
 	}
 
+	if http.DetectContentType(body) != "application/octet-stream" {
+		log.Fatal("download not Content-Type application/octet-stream; check the version exists")
+	}
+
 	_err = ioutil.WriteFile(usr.HomeDir+"/.dkenv/docker-"+version, body, 0777)
 
 	switchVersion(version, binDir)
