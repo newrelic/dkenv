@@ -2,8 +2,7 @@ package main
 
 import (
 	"errors"
-	"fmt"
-	"io"
+	"github.com/cheggaaa/pb"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -20,34 +19,6 @@ var (
 	Err_HTTP_Code         = errors.New("Received unexpected http code")
 	Err_Subject_Missmatch = errors.New("Subject doesn't match resource")
 )
-
-func (pt *PassThru) Read(p []byte) (int, error) {
-	n, err := pt.Reader.Read(p)
-	if n > 0 {
-		pt.total += int64(n)
-		percentage := float64(pt.total) / float64(pt.length) * float64(100)
-		// i := int(percentage / float64(10))
-		// is := fmt.Sprintf("Transferred %v bytes\n", i)
-		is := fmt.Sprintf("Transferred %d percent\n", int(percentage))
-		if percentage-pt.progress > 2 {
-			fmt.Fprintf(os.Stderr, is)
-			pt.progress = percentage
-		}
-	}
-
-	return n, err
-}
-
-// PassThru wraps an existing io.Reader.
-//
-// It simply forwards the Read() call, while displaying
-// the results from individual calls to it.
-type PassThru struct {
-	io.Reader
-	total    int64 // Total # of bytes transferred
-	length   int64 // Expected length
-	progress float64
-}
 
 func createDotDKEnvDirectory() {
 	usr, err := user.Current()
@@ -126,9 +97,12 @@ func GetDocker(version string, binDir string) {
 
 	defer resp.Body.Close()
 
-	readerpt := &PassThru{Reader: resp.Body, length: resp.ContentLength}
+	bar := pb.New(int(resp.ContentLength)).SetUnits(pb.U_BYTES)
+	bar.Start()
 
-	body, _err := ioutil.ReadAll(readerpt)
+	rd := bar.NewProxyReader(resp.Body)
+
+	body, _err := ioutil.ReadAll(rd)
 
 	if _err != nil {
 		log.Fatal(_err)
