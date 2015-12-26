@@ -13,12 +13,12 @@ import (
 )
 
 var (
-	Err_Resource          = errors.New("invalid webfinger resource")
-	Err_NotYetImplemented = errors.New("Not yet implemented")
-	Err_Too_Many_Redirect = errors.New("Too many redirects")
-	Err_HTTP_Redirect     = errors.New("Redirect to non-https server")
-	Err_HTTP_Code         = errors.New("Received unexpected http code")
-	Err_Subject_Missmatch = errors.New("Subject doesn't match resource")
+	errResource          = errors.New("invalid webfinger resource")
+	errNotYetImplemented = errors.New("Not yet implemented")
+	errTooManyRedirects  = errors.New("Too many redirects")
+	errHTTPRedirect      = errors.New("Redirect to non-https server")
+	errHTTPCode          = errors.New("Received unexpected http code")
+	errSubjectMissmatch  = errors.New("Subject doesn't match resource")
 )
 
 func (pt *PassThru) Read(p []byte) (int, error) {
@@ -76,17 +76,17 @@ func createVersionFile(version string) (out *os.File) {
 
 func redirectPolicyFunc(req *http.Request, via []*http.Request) error {
 	if len(via) > 10 {
-		return Err_Too_Many_Redirect
+		return errTooManyRedirects
 	}
 
 	if req.URL.Scheme != "https" {
-		return Err_HTTP_Redirect
+		return errHTTPRedirect
 	}
 
 	return nil
 }
 
-func getHttp(version string) *http.Response {
+func getHTTP(version string) *http.Response {
 	client := &http.Client{
 		CheckRedirect: redirectPolicyFunc,
 	}
@@ -115,14 +115,14 @@ func getHttp(version string) *http.Response {
 
 }
 
-func GetDocker(version string, binDir string) {
+func getDocker(version string, binDir string) {
 	createDotDKEnvDirectory()
 	// Create the docker binary file
 	// out := createVersionFile(version)
 
 	// defer out.Close()
 	// Do the htp get
-	resp := getHttp(version)
+	resp := getHTTP(version)
 
 	defer resp.Body.Close()
 
@@ -139,9 +139,13 @@ func GetDocker(version string, binDir string) {
 		log.Fatal(err)
 	}
 
+	if http.DetectContentType(body) != "application/octet-stream" {
+		log.Fatal("download not Content-Type application/octet-stream; check the version exists")
+	}
+
 	_err = ioutil.WriteFile(usr.HomeDir+"/.dkenv/docker-"+version, body, 0777)
 
-	SwitchVersion(version, binDir)
+	switchVersion(version, binDir)
 
 	if _err != nil {
 		log.Fatal(_err)

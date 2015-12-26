@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-const VERSION = "0.0.1"
+const version = "0.0.1"
 
 func main() {
 	viper.SetConfigName("config")
@@ -26,7 +26,7 @@ func main() {
 
 	if *list {
 		fmt.Println("Versions downloaded:")
-		ListDownloadedVersions()
+		listDownloadedVersions()
 		os.Exit(0)
 	}
 
@@ -35,7 +35,7 @@ func main() {
 		fmt.Println("apiVersion has value ", *apiVersion)
 		if len(*apiVersion) > 0 {
 			var err error
-			ver, err = ApiToVersion(*apiVersion)
+			ver, err = apiToVersion(*apiVersion)
 
 			if err != nil {
 				log.Fatal(err)
@@ -46,12 +46,12 @@ func main() {
 			ver = string(*version)
 		}
 
-		if VersionDownloaded(ver) {
+		if versionDownloaded(ver) {
 
 		} else {
-			GetDocker(ver, viper.GetString("BinDir"))
+			getDocker(ver, viper.GetString("BinDir"))
 		}
-		SwitchVersion(ver, viper.GetString("BinDir"))
+		switchVersion(ver, viper.GetString("BinDir"))
 
 	} else {
 		flag.Usage()
