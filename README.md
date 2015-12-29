@@ -6,21 +6,46 @@ Designed to bypass the dreaded:
 
     2014/08/26 14:21:03 Error response from daemon: client and server don't have same version (client : 1.13, server: 1.12)
 
+### Usage
 
-Use:
-
-    dkenv -version version
-
-    dkenv -apiVersion apiVersion
-
-Version example: "1.6.0"
-
-API Version example: "1.18"
+```
+$ dkenv client 1.6.0
+OR
+$ dkenv api 1.18
+```
 
 dkenv stores the docker files in ~/.dkenv and creates a symlink in /usr/local/bin
 
-Contributions
--------------
+### Full list of options
+
+```
+usage: dkenv [<flags>] <command> [<args> ...]
+
+Flags:
+  --help             Show help (also see --help-long and --help-man).
+  --bindir="/usr/local/bin"
+                     Directory to create symlinks for Docker binaries
+  --homedir=HOMEDIR  Override automatically found homedir
+  --dkenvdir="~/.dkenv"
+                     Directory to store Docker binaries
+  -d, --debug        Enable debug output
+  --version          Show application version.
+
+Commands:
+  help [<command>...]
+    Show help.
+
+  client <version>
+    Download/switch Docker binary by *client* version
+
+  api <version>
+    Download/switch Docker binary by *API* version
+
+  list
+    List downloaded/existing Docker binaries
+```
+
+### Contributions
 
 Contributions are more than welcome. Bug reports with specific reproduction
 steps are great. If you have a code contribution you'd like to make, open a
