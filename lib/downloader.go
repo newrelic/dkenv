@@ -45,7 +45,7 @@ func (d *Dkenv) DownloadDocker(version string) error {
 		return err
 	}
 
-	if err := ioutil.WriteFile(d.DkenvDir+"/docker-"+version, body, 0777); err != nil {
+	if err := ioutil.WriteFile(d.DkenvDir+"/docker-"+version, body, 0755); err != nil {
 		return fmt.Errorf("Error(s) writing docker binary: %v", err)
 	}
 
