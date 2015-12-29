@@ -100,11 +100,11 @@ func (pt *PassThru) Read(p []byte) (int, error) {
 
 func redirectPolicyFunc(req *http.Request, via []*http.Request) error {
 	if len(via) > 10 {
-		return Err_Too_Many_Redirect
+		return errTooManyRedirects
 	}
 
 	if req.URL.Scheme != "https" {
-		return Err_HTTP_Redirect
+		return errHTTPRedirect
 	}
 
 	return nil
