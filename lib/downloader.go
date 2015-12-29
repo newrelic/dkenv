@@ -12,12 +12,12 @@ import (
 )
 
 var (
-	Err_Resource          = errors.New("invalid webfinger resource")
-	Err_NotYetImplemented = errors.New("Not yet implemented")
-	Err_Too_Many_Redirect = errors.New("Too many redirects")
-	Err_HTTP_Redirect     = errors.New("Redirect to non-https server")
-	Err_HTTP_Code         = errors.New("Received unexpected http code")
-	Err_Subject_Missmatch = errors.New("Subject doesn't match resource")
+	errResource          = errors.New("invalid webfinger resource")
+	errNotYetImplemented = errors.New("Not yet implemented")
+	errTooManyRedirects  = errors.New("Too many redirects")
+	errHTTPRedirect      = errors.New("Redirect to non-https server")
+	errHTTPCode          = errors.New("Received unexpected http code")
+	errSubjectMissmatch  = errors.New("Subject doesn't match resource")
 )
 
 // PassThru wraps an existing io.Reader.
