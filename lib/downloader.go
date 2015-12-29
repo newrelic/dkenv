@@ -1,4 +1,4 @@
-package dkenv
+package lib
 
 import (
 	"errors"

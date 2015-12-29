@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/newrelic/dkenv/cli"
-	"github.com/newrelic/dkenv/dkenv"
+	"github.com/newrelic/dkenv/lib"
 
 	log "github.com/Sirupsen/logrus"
 	"gopkg.in/alecthomas/kingpin.v2"
@@ -51,7 +51,7 @@ func init() {
 }
 
 func main() {
-	d := dkenv.New(*dkenvDir, *binDir)
+	d := lib.New(*dkenvDir, *binDir)
 
 	var err error
 
