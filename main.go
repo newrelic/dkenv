@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	VERSION           = "0.0.2"
+	VERSION           = "1.1.0"
 	DEFAULT_BINDIR    = "/usr/local/bin"
 	DEFAULT_DKENV_DIR = "~/.dkenv"
 )
