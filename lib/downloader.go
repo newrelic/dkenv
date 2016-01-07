@@ -45,8 +45,9 @@ func (d *Dkenv) DownloadDocker(version string) error {
 		return err
 	}
 
-	if http.DetectContentType(body) != "application/octet-stream" {
-		log.Fatal("Download not Content-Type application/octet-stream; check the version exists")
+	contentType := http.DetectContentType(body)
+	if contentType != "application/octet-stream" {
+		return fmt.Errorf("Content-Type mismatch: %s detected", contentType)
 	}
 
 	if err := ioutil.WriteFile(d.DkenvDir+"/docker-"+version, body, 0755); err != nil {
