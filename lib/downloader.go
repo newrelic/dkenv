@@ -45,6 +45,10 @@ func (d *Dkenv) DownloadDocker(version string) error {
 		return err
 	}
 
+	if http.DetectContentType(body) != "application/octet-stream" {
+		log.Fatal("Download not Content-Type application/octet-stream; check the version exists")
+	}
+
 	if err := ioutil.WriteFile(d.DkenvDir+"/docker-"+version, body, 0755); err != nil {
 		return fmt.Errorf("Error(s) writing docker binary: %v", err)
 	}
