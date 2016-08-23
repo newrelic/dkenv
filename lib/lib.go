@@ -24,6 +24,8 @@ var (
 		"1.20": "1.8.3",
 		"1.21": "1.9.1",
 		"1.22": "1.10.3",
+		"1.23": "1.11.1",
+		"1.24": "1.12.0",
 	}
 )
 
@@ -133,7 +135,7 @@ func (d *Dkenv) isInstalled(version string) bool {
 //
 // TODO This will be a pain to test - refactor when possible.
 func (d *Dkenv) UpdateSymlink(version string) error {
-	src := d.DkenvDir + "/docker-" + version
+	src := d.DkenvDir + "/docker-" + version + "/docker/docker"
 	dst := d.BinDir + "/docker"
 
 	// Verify that the src file actually exists

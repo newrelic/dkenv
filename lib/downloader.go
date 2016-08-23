@@ -1,11 +1,12 @@
 package lib
 
 import (
+	extractor "code.cloudfoundry.org/archiver/extractor"
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"runtime"
 
 	log "github.com/Sirupsen/logrus"
@@ -38,21 +39,32 @@ func (d *Dkenv) DownloadDocker(version string) error {
 	}
 	defer resp.Body.Close()
 
-	readerpt := &PassThru{Reader: resp.Body, length: resp.ContentLength}
+	out, err := os.Create("/tmp/docker-" + version + ".tgz")
+	if err != nil {
+		return err
+	}
+	defer out.Close()
 
-	body, err := ioutil.ReadAll(readerpt)
+	_, err = io.Copy(out, resp.Body)
 	if err != nil {
 		return err
 	}
 
-	contentType := http.DetectContentType(body)
-	if contentType != "application/octet-stream" {
-		return fmt.Errorf("Content-Type mismatch: %s detected", contentType)
+	//contentType := http.DetectContentType(resp.Body)
+
+	//if contentType != "application/x-gzip" {
+	//	return fmt.Errorf("Content-Type mismatch: %s detected", contentType)
+	//}
+
+	tgzE := extractor.NewTgz()
+
+	if err := tgzE.Extract("/tmp/docker-"+version+".tgz", d.DkenvDir+"/docker-"+version); err != nil {
+		return fmt.Errorf("Error(s) in writing docker binary: %v", err)
 	}
 
-	if err := ioutil.WriteFile(d.DkenvDir+"/docker-"+version, body, 0755); err != nil {
-		return fmt.Errorf("Error(s) writing docker binary: %v", err)
-	}
+	//if err := ioutil.WriteFile(d.DkenvDir+"/docker-"+version, body, 0755); err != nil {
+	//	return fmt.Errorf("Error(s) writing docker binary: %v", err)
+	//}
 
 	return nil
 }
@@ -75,13 +87,15 @@ func (d *Dkenv) getHttp(version string) (*http.Response, error) {
 		return nil, fmt.Errorf("Unsupported system type - %v", runtime.GOOS)
 	}
 
-	resp, err := client.Get("https://get.docker.com/builds/" + system + "/x86_64/docker-" + version)
+	resp, err := client.Get("https://get.docker.com/builds/" + system + "/x86_64/docker-" + version + ".tgz")
+
 	if err != nil {
 		return nil, err
 	}
 
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("No such docker version '%v'", version)
+
+		return nil, fmt.Errorf("No such docker version '%v'", resp.StatusCode)
 	}
 
 	return resp, nil
