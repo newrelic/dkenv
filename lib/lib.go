@@ -135,9 +135,12 @@ func (d *Dkenv) isInstalled(version string) bool {
 //
 // TODO This will be a pain to test - refactor when possible.
 func (d *Dkenv) UpdateSymlink(version string) error {
-	src := d.DkenvDir + "/docker-" + version + "/docker/docker"
+	src := d.DkenvDir + "/docker-" + version + "/usr/local/bin/docker"
 	dst := d.BinDir + "/docker"
-
+	if (version == "1.11.0") || (version == "1.11.1") {
+		src = d.DkenvDir + "/docker-" + version + "/docker/docker"
+		dst = d.BinDir + "/docker"
+	}
 	// Verify that the src file actually exists
 	if _, err := os.Stat(src); err != nil {
 		return fmt.Errorf("Unable to lookup source binary '%v': %v", src, err)
