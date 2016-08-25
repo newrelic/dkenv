@@ -137,7 +137,10 @@ func (d *Dkenv) isInstalled(version string) bool {
 func (d *Dkenv) UpdateSymlink(version string) error {
 	src := d.DkenvDir + "/docker-" + version + "/usr/local/bin/docker"
 	dst := d.BinDir + "/docker"
-	if (version == "1.11.0") || (version == "1.11.1") {
+
+	// Matches versions >= 1.11.0, where the path inside the tarball has changed
+	match, _ := regexp.MatchString(`((1\.(1[1-9]|[2-9][0-9]+)\.[0-9]+)|([2-9]\.[0-9]+\.[0-9]+))`, version)
+	if match {
 		src = d.DkenvDir + "/docker-" + version + "/docker/docker"
 		dst = d.BinDir + "/docker"
 	}

@@ -1,13 +1,15 @@
 package lib
 
 import (
-	extractor "code.cloudfoundry.org/archiver/extractor"
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"runtime"
+
+	extractor "code.cloudfoundry.org/archiver/extractor"
 
 	log "github.com/Sirupsen/logrus"
 )
@@ -39,11 +41,13 @@ func (d *Dkenv) DownloadDocker(version string) error {
 	}
 	defer resp.Body.Close()
 
-	out, err := os.Create("/tmp/docker-" + version + ".tgz")
+	out, err := ioutil.TempFile("", "dkenv-"+version+"-")
+	fmt.Println(out.Name())
 	if err != nil {
 		return err
 	}
 	defer out.Close()
+	defer os.Remove(out.Name())
 
 	_, err = io.Copy(out, resp.Body)
 	if err != nil {
@@ -58,13 +62,9 @@ func (d *Dkenv) DownloadDocker(version string) error {
 
 	tgzE := extractor.NewTgz()
 
-	if err := tgzE.Extract("/tmp/docker-"+version+".tgz", d.DkenvDir+"/docker-"+version); err != nil {
+	if err := tgzE.Extract(out.Name(), d.DkenvDir+"/docker-"+version); err != nil {
 		return fmt.Errorf("Error(s) in writing docker binary: %v", err)
 	}
-
-	//if err := ioutil.WriteFile(d.DkenvDir+"/docker-"+version, body, 0755); err != nil {
-	//	return fmt.Errorf("Error(s) writing docker binary: %v", err)
-	//}
 
 	return nil
 }
