@@ -42,7 +42,6 @@ func (d *Dkenv) DownloadDocker(version string) error {
 	defer resp.Body.Close()
 
 	out, err := ioutil.TempFile("", "dkenv-"+version+"-")
-	fmt.Println(out.Name())
 	if err != nil {
 		return err
 	}
