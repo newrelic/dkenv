@@ -45,6 +45,22 @@ Commands:
     List downloaded/existing Docker binaries
 ```
 
+### Building
+
+If you don't have `godep` installed:
+```
+$ go get github.com/tools/godep
+```
+Then build:
+```
+$ $GOPATH/bin/godep go build -o dkenv main.go
+```
+The resulting binary will be in the current working directory.
+Or install into `$GOPATH/bin` with:
+```
+$GOPATH/bin/godep go install
+```
+
 ### Contributions
 
 Contributions are more than welcome. Bug reports with specific reproduction
