@@ -1,3 +1,7 @@
+# ⛔️ Deprecated ⛔️
+
+This project is no longer supported; please consider using https://github.com/howtowhale/dvm instead.
+
 DKENV
 -----
 dkenv is a tool that downloads Docker versions for you, keeps track of your versions, and lets you switch between docker versions on the fly. You can also specify the apiversion on the command line and dkenv will select the correct docker version.
